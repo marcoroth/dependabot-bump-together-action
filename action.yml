@@ -1,0 +1,32 @@
+name: 'dependabot-bump-together-action'
+description: 'A dependabot GitHub Action which bumps multiple dependencies in one pull request'
+author: 'Marco Roth <marco.roth@intergga.ch>'
+inputs:
+  dependencies:
+    description: 'Comma-separated list of the dependencies dependabot should bump together'
+    required: true
+  package_managers:
+    description: 'Comma-separated list of the package managers dependabot should update'
+    required: true
+    default: 'bundler, npm_and_yarn'
+  branch:
+    description: 'Branch dependabot runs against'
+    required: true
+    default: 'master'
+  directory:
+    description: 'Directory where the project lives'
+    required: true
+    default: '/'
+  username:
+    description: 'The user to create the pull request'
+    required: true
+    default: 'x-access-token'
+  token:
+    description: 'Access token with permission to create the pull request'
+    required: true
+branding:
+  icon: 'arrow-up-circle'
+  color: 'blue'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
