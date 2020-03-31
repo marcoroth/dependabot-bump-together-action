@@ -7,27 +7,48 @@ require 'dependabot/file_updaters'
 require 'dependabot/pull_request_creator'
 require 'dependabot/omnibus'
 
-credentials = [
-  {
-    'type' => 'git_source',
-    'host' => 'github.com',
-    'username' => ENV['INPUT_USERNAME'],
-    'password' => ENV['INPUT_TOKEN']
-  }
-]
-
-source = Dependabot::Source.new(
-  provider: 'github',
-  repo: ENV['GITHUB_REPOSITORY'],
-  directory: ENV['INPUT_DIRECTORY'],
-  branch: ENV['INPUT_BRANCH']
-)
+username = ENV['INPUT_USERNAME']
+repo = ENV['GITHUB_REPOSITORY']
+directory = ENV['INPUT_DIRECTORY']
+branch = ENV['INPUT_BRANCH']
+dependencies = ENV['INPUT_DEPENDENCIES']
+package_managers_raw = ENV['INPUT_PACKAGE_MANAGERS']
+access_token = ENV['INPUT_TOKEN']
 
 updated_files_global = []
 updated_deps_global = []
 commit = nil
 
-package_managers = ENV['INPUT_PACKAGE_MANAGERS'].split(",").map(&:strip) || %w[bundler npm_and_yarn]
+puts "INFO: using user: #{username}"
+puts "INFO: using repo: #{repo}"
+puts "INFO: using directory: #{directory}"
+puts "INFO: using branch: #{branch}"
+
+credentials = [
+  {
+    'type' => 'git_source',
+    'host' => 'github.com',
+    'username' => username,
+    'password' => access_token
+  }
+]
+
+source = Dependabot::Source.new(
+  provider: 'github',
+  repo: repo,
+  directory: directory,
+  branch: branch
+)
+
+package_managers = package_managers_raw&.split(',')&.map(&:strip) || %w[bundler]
+puts "INFO: using package managers: #{package_managers.join(', ')}"
+
+packages = dependencies&.split(',')&.map(&:strip) || []
+puts "INFO: processing packages: #{packages.join(', ')}"
+
+if packages.empty?
+  puts "INFO: no dependencies given. The provided input was \"#{dependencies}\""
+end
 
 package_managers.each do |package_manager|
   fetcher = Dependabot::FileFetchers.for_package_manager(package_manager).new(
@@ -45,12 +66,7 @@ package_managers.each do |package_manager|
   )
 
   dependencies = parser.parse
-
-  if ENV['INPUT_DEPENDENCIES']
-    packages = ENV['INPUT_DEPENDENCIES'].split(",").map(&:strip)
-
-    dependencies.select! { |dep| packages.include?(dep.name) }
-  end
+  dependencies.select! { |dep| packages.include?(dep.name) } if packages.any?
 
   dependencies.each do |dep|
     puts "INFO: processing dependency #{dep.name} #{dep.version}"
@@ -61,7 +77,12 @@ package_managers.each do |package_manager|
       credentials: credentials
     )
 
-    next if checker.up_to_date?
+    if checker.up_to_date?
+      puts "INFO: #{dep.name} #{dep.version} is up to date"
+      next
+    else
+      puts "INFO: #{dep.name} will be updated"
+    end
 
     checker.can_update?(requirements_to_unlock: :own)
     updated_deps = checker.updated_dependencies(requirements_to_unlock: :own)
@@ -80,10 +101,19 @@ end
 updated_deps_global.flatten!
 updated_files_global.flatten!
 
-puts updated_deps_global.inspect
-puts updated_files_global.inspect
+updated_deps_global.each do |updated_dep|
+  new_ref = updated_dep.requirements&.first&.dig(:source, :ref)
+  prev_ref = updated_dep.previous_requirements&.first&.dig(:source, :ref)
+  file = updated_dep.requirements&.first&.dig(:file)
 
-if updated_deps_global.any? || updated_files_global.any?
+  puts "INFO: updated #{updated_dep.package_manager} dependency #{updated_dep.name} from #{prev_ref} (#{updated_dep.previous_version}) to #{new_ref} (#{updated_dep.version}) in #{file}"
+end
+
+updated_files_global.each do |updated_file|
+  puts "INFO: going to commit changes in #{updated_file.name}"
+end
+
+if updated_deps_global.any? && updated_files_global.any?
 
   pr_creator = Dependabot::PullRequestCreator.new(
     source: source,
@@ -93,7 +123,14 @@ if updated_deps_global.any? || updated_files_global.any?
     credentials: credentials
   )
 
-  pr_creator.create
+  pr = pr_creator.create
+
+  if pr
+    puts "INFO: Created PR with title \"#{pr.dig(:title)}\" (ID: #{pr.dig(:number)}) in #{pr.dig(:repo, :full_name)}"
+    puts "INFO: #{pr.dig(:url)}"
+  else
+    puts 'INFO: PR could not be created'
+  end
 else
-  puts 'Nothing to update'
+  puts 'INFO: no dependency to update'
 end
