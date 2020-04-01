@@ -24,6 +24,14 @@ inputs:
   token:
     description: 'Access token with permission to create the pull request'
     required: true
+  bundler_version:
+    description: 'Bundler version to use'
+    required: true
+    default: '2.0.2'
+  dependabot_version:
+    description: 'Dependabot version to use'
+    required: true
+    default: '0.117.5'
 branding:
   icon: 'arrow-up-circle'
   color: 'blue'

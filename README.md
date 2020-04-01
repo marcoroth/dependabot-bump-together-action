@@ -14,6 +14,8 @@ uses: marcoroth/dependabot-bump-together-action@v0.1.1
     directory: /
     branch: development
     username: x-access-token
+    bundler_version: 2.0.2
+    dependabot_version: 0.117.5
     token: ${{ secrets.GITHUB_ACCESS_TOKEN }}
 ```
 
@@ -75,6 +77,21 @@ Default value: `x-access-token`
 ### `token`
 
 **Required:** A GitHub [Access Token](https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line) with permission to create the pull request and access potential private repos dependabot should bump.
+
+
+### `bundler_version`
+
+**Required:** Bundler version to use
+
+Default value: `2.0.2`
+
+
+### `dependabot_version`
+
+**Required:** Dependabot version to use
+
+Default value: `0.117.5`
+
 
 ## Ressources
 
