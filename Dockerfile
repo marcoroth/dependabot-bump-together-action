@@ -6,8 +6,8 @@ LABEL "version"="0.1.1"
 
 RUN echo 'gem: --no-document' >> ~/.gemrc
 
-RUN gem install bundler
-RUN gem install dependabot-omnibus
+RUN gem install bundler -v 2.0.2
+RUN gem install dependabot-omnibus -v 0.117.5
 
 WORKDIR /action
 COPY lib /action/lib
