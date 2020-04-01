@@ -1,4 +1,4 @@
-FROM dependabot/dependabot-core
+FROM dependabot/dependabot-core:0.117.5
 
 LABEL "repository"="https://github.com/marcoroth/dependabot-bump-together-action"
 LABEL "maintainer"="Marco Roth <marco.roth@intergga.ch>"
