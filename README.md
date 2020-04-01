@@ -7,7 +7,7 @@ GitHub Action to bump multiple dependencies with [dependabot](https://dependabot
 Here is an example how to use this action:
 
 ```yaml
-uses: marcoroth/dependabot-bump-together-action@v0.1.1
+uses: marcoroth/dependabot-bump-together-action@master
   with:
     packages: dependency_1, dependency_2
     package_managers: bundler, npm_and_yarn
