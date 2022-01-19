@@ -24,7 +24,7 @@ jobs:
           username: x-access-token
           bundler_version: 2.0.2
           dependabot_version: 0.117.5
-          token: ${{ secrets.GITHUB_ACCESS_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 ```
 
 ## Inputs
