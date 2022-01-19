@@ -3,7 +3,7 @@ ARG image=dependabot/dependabot-core
 ARG TAG=${image}:${INPUT_DEPENDABOT_VERSION}
 
 FROM $TAG
-
+USER root
 # INPUT_DEPENDABOT_VERSION just defaults to 0.171.2 if nothing was provided
 ARG INPUT_DEPENDABOT_VERSION=0.171.2
 ENV DEPENDABOT_VERSION="${INPUT_DEPENDABOT_VERSION}"
