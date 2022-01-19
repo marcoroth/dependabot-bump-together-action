@@ -1,15 +1,15 @@
-ARG INPUT_DEPENDABOT_VERSION=0.117.5
+ARG INPUT_DEPENDABOT_VERSION=0.171.2
 ARG image=dependabot/dependabot-core
 ARG TAG=${image}:${INPUT_DEPENDABOT_VERSION}
 
 FROM $TAG
 
-# INPUT_DEPENDABOT_VERSION just defaults to 0.117.5 if nothing was provided
-ARG INPUT_DEPENDABOT_VERSION=0.117.5
+# INPUT_DEPENDABOT_VERSION just defaults to 0.171.2 if nothing was provided
+ARG INPUT_DEPENDABOT_VERSION=0.171.2
 ENV DEPENDABOT_VERSION="${INPUT_DEPENDABOT_VERSION}"
 
-# INPUT_BUNDLER_VERSION just defaults to 2.0.2 if nothing was provided
-ARG INPUT_BUNDLER_VERSION=2.0.2
+# INPUT_BUNDLER_VERSION just defaults to 2.3.5 if nothing was provided
+ARG INPUT_BUNDLER_VERSION=2.3.5
 ENV BUNDLER_VERSION="${INPUT_BUNDLER_VERSION}"
 
 LABEL "repository"="https://github.com/marcoroth/dependabot-bump-together-action"
