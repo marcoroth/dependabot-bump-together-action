@@ -38,6 +38,3 @@ branding:
 runs:
   using: 'docker'
   image: 'Dockerfile'
-env:
-  INPUT_DEPENDABOT_VERSION: 2.0.2
-  INPUT_BUNDLER_VERSION: 0.117.5

@@ -104,8 +104,8 @@ package_managers.each do |package_manager|
 
   begin
     updated_files_global << updater.updated_dependency_files
-  rescue RuntimeError => e
-    puts "INFO: This error occured while trying to update '#{dep.name}': #{e.message}. Skipping..."
+  rescue RuntimeError
+    puts "INFO: No files to update for package manager '#{package_manager}'. Skipping..."
 
     next
   end
