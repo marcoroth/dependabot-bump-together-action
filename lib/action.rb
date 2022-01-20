@@ -40,15 +40,14 @@ source = Dependabot::Source.new(
   branch: branch
 )
 
-package_managers = package_managers_raw&.split(',')&.map(&:strip) || %w[bundler]
+package_managers = package_managers_raw.to_s.split(',').map(&:strip)
 puts "INFO: using package managers: #{package_managers.join(', ')}"
 
-packages = dependencies&.split(',')&.map(&:strip) || []
+packages = dependencies.to_s.split(',').map(&:strip)
 puts "INFO: processing packages: #{packages.join(', ')}"
 
-if packages.empty?
-  puts "INFO: no dependencies given. The provided input was \"#{dependencies}\""
-end
+puts "INFO: no package manager provided. The provided input is \"#{package_managers_raw}\"" if package_managers.empty?
+puts "INFO: no dependencies given. The provided input is \"#{dependencies}\"" if packages.empty?
 
 package_managers.each do |package_manager|
   fetcher = Dependabot::FileFetchers.for_package_manager(package_manager).new(
@@ -87,19 +86,27 @@ package_managers.each do |package_manager|
     checker.can_update?(requirements_to_unlock: :own)
     updated_deps = checker.updated_dependencies(requirements_to_unlock: :own)
 
-    updater = Dependabot::FileUpdaters.for_package_manager(package_manager).new(
-      dependencies: updated_deps,
-      dependency_files: files,
-      credentials: credentials
-    )
-
+    # updater = Dependabot::FileUpdaters.for_package_manager(package_manager).new(
+    #   dependencies: updated_deps,
+    #   dependency_files: files,
+    #   credentials: credentials
+    # )
+    #
     updated_deps_global << updated_deps
-    updated_files_global << updater.updated_dependency_files
+    # updated_files_global << updater.updated_dependency_files
   end
+
+  updater = Dependabot::FileUpdaters.for_package_manager(package_manager).new(
+    dependencies: updated_deps_global.flatten.uniq,
+    dependency_files: files,
+    credentials: credentials
+  )
+
+  updated_files_global << updater.updated_dependency_files
 end
 
-updated_deps_global.flatten!
-updated_files_global.flatten!
+updated_deps_global.flatten!.uniq!
+updated_files_global.flatten!.uniq!
 
 updated_deps_global.each do |updated_dep|
   new_ref = updated_dep.requirements&.first&.dig(:source, :ref)
