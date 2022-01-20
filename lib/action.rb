@@ -102,7 +102,13 @@ package_managers.each do |package_manager|
     credentials: credentials
   )
 
-  updated_files_global << updater.updated_dependency_files
+  begin
+    updated_files_global << updater.updated_dependency_files
+  rescue RuntimeError => e
+    puts "INFO: This error occured while trying to update '#{dep.name}': #{e.message}. Skipping..."
+
+    next
+  end
 end
 
 updated_deps_global.flatten!.uniq!
