@@ -104,7 +104,7 @@ package_managers.each do |package_manager|
 
   begin
     updated_files_global << updater.updated_dependency_files
-  rescue RuntimeError
+  rescue RuntimeError, Dependabot::SharedHelpers::HelperSubprocessFailed
     puts "INFO: No files to update for package manager '#{package_manager}'. Skipping..."
 
     next
