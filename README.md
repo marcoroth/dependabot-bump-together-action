@@ -22,8 +22,8 @@ jobs:
           directory: /
           branch: development
           username: x-access-token
-          bundler_version: 2.0.2
-          dependabot_version: 0.117.5
+          bundler_version: 2.3.5
+          dependabot_version: 0.171.2
           token: ${{ secrets.GITHUB_TOKEN }}
 ```
 
@@ -91,14 +91,14 @@ Default value: `x-access-token`
 
 Bundler version to use
 
-Default value: `2.0.2`
+Default value: `2.3.5`
 
 
 ### `dependabot_version`
 
 Dependabot version to use
 
-Default value: `0.117.5`
+Default value: `0.171.2`
 
 
 ## Ressources
