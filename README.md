@@ -7,16 +7,24 @@ GitHub Action to bump multiple dependencies with [dependabot](https://dependabot
 Here is an example how to use this action:
 
 ```yaml
-uses: marcoroth/dependabot-bump-together-action@master
-  with:
-    packages: dependency_1, dependency_2
-    package_managers: bundler, npm_and_yarn
-    directory: /
-    branch: development
-    username: x-access-token
-    bundler_version: 2.0.2
-    dependabot_version: 0.117.5
-    token: ${{ secrets.GITHUB_ACCESS_TOKEN }}
+name: Dependabot
+on:
+  schedule:
+    - cron: "0 0 * * *"
+jobs:
+  check-dependencies:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: marcoroth/dependabot-bump-together-action@master
+        with:
+          dependencies: dependency_1, dependency_2
+          package_managers: bundler, npm_and_yarn
+          directory: /
+          branch: development
+          username: x-access-token
+          bundler_version: 2.3.5
+          dependabot_version: 0.171.2
+          token: ${{ secrets.GITHUB_TOKEN }}
 ```
 
 ## Inputs
@@ -83,14 +91,14 @@ Default value: `x-access-token`
 
 Bundler version to use
 
-Default value: `2.0.2`
+Default value: `2.3.5`
 
 
 ### `dependabot_version`
 
 Dependabot version to use
 
-Default value: `0.117.5`
+Default value: `0.171.2`
 
 
 ## Ressources
