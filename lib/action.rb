@@ -71,6 +71,7 @@ package_managers.each do |package_manager|
   dependencies = parser.parse
   dependencies.select! { |dep| packages.include?(dep.name) } if packages.any?
 
+  # Get all updates that match list of packages
   dependencies.each do |dep|
     puts ""
     puts "INFO: processing dependency #{dep.name} #{dep.version}"
@@ -97,15 +98,22 @@ package_managers.each do |package_manager|
     puts ""
   end
 
-  updater = Dependabot::FileUpdaters.for_package_manager(package_manager).new(
-    dependencies: updated_deps_for_package_manager.flatten.uniq,
-    dependency_files: files,
-    credentials: credentials
-  )
+  # Iteratively update files for each dependency
+  deps = []
+  updated_deps_for_package_manager.flatten.uniq.each do |dep|
+    updater = Dependabot::FileUpdaters.for_package_manager(package_manager).new(
+      dependencies: [dep,],
+      dependency_files: files,
+      credentials: credentials
+    )
+    # Overwrite files with changes for each update
+    files = updater.updated_dependency_files
+    deps << dep
+  end
 
   begin
-    updated_files_global << updater.updated_dependency_files
-    updated_deps_global << updated_deps_for_package_manager.flatten.uniq
+    updated_files_global << files
+    updated_deps_global << deps
   rescue RuntimeError
     puts "INFO: No files to update for package manager '#{package_manager}'. Skipping..."
 
