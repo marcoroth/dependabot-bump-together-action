@@ -22,8 +22,6 @@ jobs:
           directory: /
           branch: development
           username: x-access-token
-          bundler_version: 2.3.5
-          dependabot_version: 0.171.2
           token: ${{ secrets.GITHUB_TOKEN }}
 ```
 
@@ -85,20 +83,6 @@ Default value: `x-access-token`
 ### `token`
 
 **Required:** A GitHub [Access Token](https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line) with permission to create the pull request and access potential private repos dependabot should bump.
-
-
-### `bundler_version`
-
-Bundler version to use
-
-Default value: `2.3.5`
-
-
-### `dependabot_version`
-
-Dependabot version to use
-
-Default value: `0.171.2`
 
 
 ## Ressources
