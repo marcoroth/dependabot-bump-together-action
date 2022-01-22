@@ -15,10 +15,10 @@ jobs:
   check-dependencies:
     runs-on: ubuntu-latest
     steps:
-      - uses: marcoroth/dependabot-bump-together-action@master
+      - uses: banesullivan/dependabot-bump-together-action@main
         with:
           dependencies: dependency_1, dependency_2
-          package_managers: bundler, npm_and_yarn
+          package_managers: pip
           directory: /
           branch: development
           username: x-access-token
@@ -70,7 +70,7 @@ Default value: `/`
 
 **Required:** Branch dependabot runs against
 
-Default value: `master`
+Default value: `main`
 
 
 ### `username`
