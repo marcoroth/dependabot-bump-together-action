@@ -1,9 +1,8 @@
 FROM dependabot/dependabot-core
 USER root
 
-LABEL "repository"="https://github.com/marcoroth/dependabot-bump-together-action"
-LABEL "maintainer"="Marco Roth <marco.roth@intergga.ch>"
-LABEL "version"="0.2.0"
+LABEL "repository"="https://github.com/banesullivan/dependabot-bump-together-action"
+LABEL "version"="0.3.0"
 
 RUN echo 'gem: --no-document' >> ~/.gemrc
 
