@@ -159,10 +159,6 @@ if updated_deps_global.any? && updated_files_global.any?
 
   pr = pr_creator.create
 
-  puts pr.inspect
-  puts ""
-  puts pr.methods
-
   if pr
     puts "INFO: Created PR with title \"#{pr.dig(:title)}\" (ID: #{pr.dig(:number)}) in #{pr.dig(:repo, :full_name)}"
     puts "INFO: #{pr.dig(:url)}"
