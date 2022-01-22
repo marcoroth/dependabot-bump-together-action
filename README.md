@@ -9,6 +9,7 @@ Here is an example how to use this action:
 ```yaml
 name: Dependabot
 on:
+  workflow_dispatch:
   schedule:
     - cron: "0 0 * * *"
 jobs:
