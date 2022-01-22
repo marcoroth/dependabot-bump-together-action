@@ -167,8 +167,8 @@ if updated_deps_global.any? && updated_files_global.any?
     puts "INFO: Created PR with title \"#{pr.dig(:title)}\" (ID: #{pr.dig(:number)}) in #{pr.dig(:repo, :full_name)}"
     puts "INFO: #{pr.dig(:url)}"
   else
-    puts 'INFO: PR could not be created'
+    puts 'ERROR: PR already exists or an error has occurred'
   end
 else
-  puts 'INFO: no dependency to update'
+  puts 'INFO: no dependencies to update'
 end
