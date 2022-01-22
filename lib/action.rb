@@ -39,18 +39,21 @@ source = Dependabot::Source.new(
   directory: directory,
   branch: branch
 )
+puts ""
 
-package_managers = package_managers_raw&.split(',')&.map(&:strip) || %w[bundler]
+package_managers = package_managers_raw.to_s.split(',').map(&:strip)
 puts "INFO: using package managers: #{package_managers.join(', ')}"
 
-packages = dependencies&.split(',')&.map(&:strip) || []
+packages = dependencies.to_s.split(',').map(&:strip)
 puts "INFO: processing packages: #{packages.join(', ')}"
+puts ""
 
-if packages.empty?
-  puts "INFO: no dependencies given. The provided input was \"#{dependencies}\""
-end
+puts "INFO: no package manager provided. The provided input is \"#{package_managers_raw}\"" if package_managers.empty?
+puts "INFO: no dependencies given. The provided input is \"#{dependencies}\"" if packages.empty?
 
 package_managers.each do |package_manager|
+  updated_deps_for_package_manager = []
+
   fetcher = Dependabot::FileFetchers.for_package_manager(package_manager).new(
     source: source,
     credentials: credentials
@@ -68,7 +71,9 @@ package_managers.each do |package_manager|
   dependencies = parser.parse
   dependencies.select! { |dep| packages.include?(dep.name) } if packages.any?
 
+  # Get all updates that match list of packages
   dependencies.each do |dep|
+    puts ""
     puts "INFO: processing dependency #{dep.name} #{dep.version}"
 
     checker = Dependabot::UpdateCheckers.for_package_manager(package_manager).new(
@@ -78,43 +83,72 @@ package_managers.each do |package_manager|
     )
 
     if checker.up_to_date?
-      puts "INFO: #{dep.name} #{dep.version} is up to date"
+      puts "INFO: #{dep.name} #{dep.version} is up to date! Skipping..."
+
       next
     else
-      puts "INFO: #{dep.name} will be updated"
+      puts "INFO: #{dep.name} is outdated and will be updated..."
     end
 
     checker.can_update?(requirements_to_unlock: :own)
     updated_deps = checker.updated_dependencies(requirements_to_unlock: :own)
 
+    updated_deps_for_package_manager << updated_deps if updated_deps.any?
+
+    puts ""
+  end
+
+  # Iteratively update files for each dependency
+  deps = []
+  updated_deps_for_package_manager.flatten.uniq.each do |dep|
     updater = Dependabot::FileUpdaters.for_package_manager(package_manager).new(
-      dependencies: updated_deps,
+      dependencies: [dep,],
       dependency_files: files,
       credentials: credentials
     )
-
-    updated_deps_global << updated_deps
-    updated_files_global << updater.updated_dependency_files
+    # Overwrite files with changes for each update
+    files = updater.updated_dependency_files
+    deps << dep
   end
+
+  begin
+    updated_files_global << files
+    updated_deps_global << deps
+  rescue RuntimeError
+    puts "INFO: No files to update for package manager '#{package_manager}'. Skipping..."
+
+    next
+  rescue Dependabot::SharedHelpers::HelperSubprocessFailed, StandardError => e
+    puts "ERROR: Error while trying to retrieve updated files for package manager '#{package_manager}'. Reason: #{e}. Skipping..."
+    puts e.backtrace
+
+    next
+  end
+rescue => e
+  puts "ERROR: while proccessing package manager '#{package_manager}'. Reason: #{e}"
+  puts e.backtrace
+
+  next
 end
 
-updated_deps_global.flatten!
-updated_files_global.flatten!
+updated_deps_global = updated_deps_global.flatten.uniq
+updated_files_global = updated_files_global.flatten.uniq
 
 updated_deps_global.each do |updated_dep|
   new_ref = updated_dep.requirements&.first&.dig(:source, :ref)
   prev_ref = updated_dep.previous_requirements&.first&.dig(:source, :ref)
   file = updated_dep.requirements&.first&.dig(:file)
 
-  puts "INFO: updated #{updated_dep.package_manager} dependency #{updated_dep.name} from #{prev_ref} (#{updated_dep.previous_version}) to #{new_ref} (#{updated_dep.version}) in #{file}"
+  puts "INFO: updated #{updated_dep.package_manager} dependency #{updated_dep.name} from #{prev_ref ? "#{prev_ref} ": ""}(#{updated_dep.previous_version}) to #{new_ref ? "#{new_ref} ": ""}(#{updated_dep.version}) in #{file}"
 end
+
+puts ""
 
 updated_files_global.each do |updated_file|
   puts "INFO: going to commit changes in #{updated_file.name}"
 end
 
 if updated_deps_global.any? && updated_files_global.any?
-
   pr_creator = Dependabot::PullRequestCreator.new(
     source: source,
     base_commit: commit,
@@ -125,7 +159,11 @@ if updated_deps_global.any? && updated_files_global.any?
 
   pr = pr_creator.create
 
-  if pr&.status == 201
+  puts pr.inspect
+  puts ""
+  puts pr.methods
+
+  if pr
     puts "INFO: Created PR with title \"#{pr.dig(:title)}\" (ID: #{pr.dig(:number)}) in #{pr.dig(:repo, :full_name)}"
     puts "INFO: #{pr.dig(:url)}"
   else
