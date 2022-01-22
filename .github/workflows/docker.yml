@@ -1,5 +1,7 @@
 name: Docker Package
 on:
+  schedule:
+      - cron: "0 0 1 * *"  # Once a month
   push:
     tags: "*"
     branches:
