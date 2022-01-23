@@ -69,7 +69,13 @@ package_managers.each do |package_manager|
   )
 
   dependencies = parser.parse
-  dependencies.select! { |dep| packages.include?(dep.name.split("[")&.first) } if packages.any?
+
+  if packages.any?
+    dependencies.select! { |dep|
+      packages.include?(dep.name) ||
+      (package_manager == "pip" && packages.include?(dep.name.split("[").first))
+    }
+  end
 
   # Get all updates that match list of packages
   dependencies.each do |dep|
