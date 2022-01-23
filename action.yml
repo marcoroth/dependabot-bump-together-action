@@ -31,6 +31,8 @@ runs:
   using: "composite"
   steps:
     - uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: 2.6
     - name: Install bundler and dependabot
       shell: bash
       run: |
