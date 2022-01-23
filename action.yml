@@ -28,7 +28,13 @@ branding:
   icon: 'arrow-up-circle'
   color: 'blue'
 runs:
-  using: 'docker'
-  image: 'docker://dependabot/dependabot-core'
-  pre-entrypoint: 'setup.sh'
-  entrypoint: 'ruby ./action.rb'
+  using: "composite"
+  steps:
+    - uses: ruby/setup-ruby@v1
+    - name: Install bundler and dependabot
+      run: |
+        gem install bundler
+        gem install dependabot-omnibus
+    - name: Check dependencies
+      run: ${{ github.action_path }}/action.rb
+      shell: ruy
