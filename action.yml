@@ -32,9 +32,10 @@ runs:
   steps:
     - uses: ruby/setup-ruby@v1
     - name: Install bundler and dependabot
+      shell: bash
       run: |
         gem install bundler
         gem install dependabot-omnibus
     - name: Check dependencies
+      shell: ruby
       run: ${{ github.action_path }}/action.rb
-      shell: ruy
