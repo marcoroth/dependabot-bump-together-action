@@ -40,7 +40,7 @@ runs:
         gem install dependabot-omnibus
     - name: Check dependencies
       shell: bash
-      run: ${{ github.repository }}ruby ${{ github.action_path }}/action.rb
+      run: ruby ${{ github.action_path }}/action.rb
       env:
         # https://github.com/actions/runner/issues/665#issuecomment-676581170
         GITHUB_REPOSITORY: ${{ github.repository }}
