@@ -41,3 +41,12 @@ runs:
     - name: Check dependencies
       shell: bash
       run: ruby ${{ github.action_path }}/action.rb
+      env:
+        https://github.com/actions/runner/issues/665#issuecomment-676581170
+        GITHUB_REPOSITORY: ${{ github.repository }}
+        INPUT_USERNAME: ${{ inputs.username }}
+        INPUT_DIRECTORY: ${{ inputs.directory }}
+        INPUT_BRANCH: ${{ inputs.branch }}
+        INPUT_DEPENDENCIES: ${{ inputs.dependencies }}
+        INPUT_PACKAGE_MANAGERS: ${{ inputs.package_managers }}
+        INPUT_TOKEN: ${{ inputs.token }}
