@@ -30,6 +30,9 @@ branding:
 runs:
   using: "composite"
   steps:
+    - uses: actions/setup-python@v2
+      with:
+        python-version: "3.8"
     - uses: ruby/setup-ruby@v1
       with:
         ruby-version: 3.1
