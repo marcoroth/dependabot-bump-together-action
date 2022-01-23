@@ -1,16 +1,16 @@
 name: 'dependabot-bump-together-action'
-description: 'A dependabot GitHub Action which bumps multiple dependencies in one pull request'
+description: 'A Dependabot GitHub Action which bumps multiple dependencies in one pull request'
 author: 'Marco Roth <marco.roth@intergga.ch> and Bane Sullivan <@banesullivan>'
 inputs:
   dependencies:
-    description: 'Comma-separated list of the dependencies dependabot should bump together'
+    description: 'Comma-separated list of the dependencies Dependabot should bump together'
     required: true
   package_managers:
-    description: 'Comma-separated list of the package managers dependabot should update'
+    description: 'Comma-separated list of the package managers Dependabot should update'
     required: true
     default: 'bundler, npm_and_yarn, pip'
   branch:
-    description: 'Branch dependabot runs against'
+    description: 'The branch Dependabot runs against in your repository'
     required: true
     default: 'main'
   directory:

@@ -1,4 +1,4 @@
-name: Docker Package
+name: Docker Image
 on:
   schedule:
     - cron: "0 0 1 * *"  # Once a month
