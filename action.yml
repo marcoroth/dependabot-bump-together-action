@@ -39,5 +39,5 @@ runs:
         gem install bundler
         gem install dependabot-omnibus
     - name: Check dependencies
-      shell: ruby
-      run: ${{ github.action_path }}/action.rb
+      shell: bash
+      run: ruby ${{ github.action_path }}/action.rb
