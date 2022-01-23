@@ -1,18 +1,18 @@
 name: 'dependabot-bump-together-action'
-description: 'A dependabot GitHub Action which bumps multiple dependencies in one pull request'
-author: 'Marco Roth <marco.roth@intergga.ch>'
+description: 'A Dependabot GitHub Action which bumps multiple dependencies in one pull request'
+author: 'Marco Roth <marco.roth@intergga.ch> and Bane Sullivan <@banesullivan>'
 inputs:
   dependencies:
-    description: 'Comma-separated list of the dependencies dependabot should bump together'
+    description: 'Comma-separated list of the dependencies Dependabot should bump together'
     required: true
   package_managers:
-    description: 'Comma-separated list of the package managers dependabot should update'
+    description: 'Comma-separated list of the package managers Dependabot should update'
     required: true
-    default: 'bundler, npm_and_yarn'
+    default: 'bundler, npm_and_yarn, pip'
   branch:
-    description: 'Branch dependabot runs against'
+    description: 'The branch Dependabot runs against in your repository'
     required: true
-    default: 'master'
+    default: 'main'
   directory:
     description: 'Directory where the project lives'
     required: true
@@ -24,20 +24,9 @@ inputs:
   token:
     description: 'Access token with permission to create the pull request'
     required: true
-  bundler_version:
-    description: 'Bundler version to use'
-    required: false
-    default: '2.0.2'
-  dependabot_version:
-    description: 'Dependabot version to use'
-    required: false
-    default: '0.117.5'
 branding:
   icon: 'arrow-up-circle'
   color: 'blue'
 runs:
   using: 'docker'
-  image: 'Dockerfile'
-env:
-  INPUT_DEPENDABOT_VERSION: 2.0.2
-  INPUT_BUNDLER_VERSION: 0.117.5
+  image: 'docker://ghcr.io/marcoroth/dependabot-bump-together-action:main'

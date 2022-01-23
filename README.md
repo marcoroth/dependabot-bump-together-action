@@ -1,22 +1,29 @@
 # Dependabot Bump Together GitHub Action
 
-GitHub Action to bump multiple dependencies with [dependabot](https://dependabot.com) in a single pull request.
+GitHub Action to bump multiple dependencies with [Dependabot](https://dependabot.com) in a single pull request.
 
 ## Example usage
 
 Here is an example how to use this action:
 
 ```yaml
-uses: marcoroth/dependabot-bump-together-action@master
-  with:
-    packages: dependency_1, dependency_2
-    package_managers: bundler, npm_and_yarn
-    directory: /
-    branch: development
-    username: x-access-token
-    bundler_version: 2.0.2
-    dependabot_version: 0.117.5
-    token: ${{ secrets.GITHUB_ACCESS_TOKEN }}
+name: Dependabot
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 0 * * *"
+jobs:
+  check-dependencies:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: marcoroth/dependabot-bump-together-action@main
+        with:
+          dependencies: dependency_1, dependency_2
+          package_managers: bundler, npm_and_yarn, pip
+          directory: /
+          branch: main
+          username: x-access-token
+          token: ${{ secrets.GITHUB_TOKEN }}
 ```
 
 ## Inputs
@@ -25,14 +32,14 @@ These options can be provided via `with:` in the workflow file.
 
 ### `dependencies`
 
-**Required:** Comma-separated list of the dependencies dependabot should bump together
+**Required:** Comma-separated list of the dependencies Dependabot should bump together
 
 
 ### `package_managers`
 
-**Required:** Comma-separated list of the package managers dependabot should update.
+**Required:** Comma-separated list of the package managers Dependabot should update.
 
-Default value: `bundler, npm_and_yarn`
+Default value: `bundler, npm_and_yarn, pip`
 
 The available options are:
 
@@ -62,9 +69,9 @@ Default value: `/`
 
 ### `branch`
 
-**Required:** Branch dependabot runs against
+**Required:** The branch Dependabot runs against in your repository.
 
-Default value: `master`
+Default value: `main`
 
 
 ### `username`
@@ -76,23 +83,9 @@ Default value: `x-access-token`
 
 ### `token`
 
-**Required:** A GitHub [Access Token](https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line) with permission to create the pull request and access potential private repos dependabot should bump.
-
-
-### `bundler_version`
-
-Bundler version to use
-
-Default value: `2.0.2`
-
-
-### `dependabot_version`
-
-Dependabot version to use
-
-Default value: `0.117.5`
+**Required:** A GitHub [Access Token](https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line) with permission to create the pull request and access potential private repos Dependabot should bump.
 
 
 ## Ressources
 
-This GitHub Action depends on the [`dependabot/dependabot-core`](https://hub.docker.com/r/dependabot/dependabot-core) Docker image and uses a modified version of the [dependabot/dependabot-script](https://github.com/dependabot/dependabot-script) `update-script.rb` to bump the dependencies.
+This GitHub Action depends on the [`dependabot/dependabot-core`](https://hub.docker.com/r/dependabot/dependabot-core) Docker Image and uses a modified version of the [dependabot/dependabot-script](https://github.com/dependabot/dependabot-script) `update-script.rb` to bump the dependencies.
