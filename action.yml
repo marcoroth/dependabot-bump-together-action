@@ -31,4 +31,4 @@ runs:
   using: 'docker'
   image: 'docker://dependabot/dependabot-core'
   pre-entrypoint: 'setup.sh'
-  entrypoint: ['ruby', './action.rb']
+  entrypoint: 'ruby ./action.rb'
