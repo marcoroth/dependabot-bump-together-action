@@ -29,4 +29,6 @@ branding:
   color: 'blue'
 runs:
   using: 'docker'
-  image: 'docker://ghcr.io/marcoroth/dependabot-bump-together-action:main'
+  image: 'docker://dependabot/dependabot-core'
+  pre-entrypoint: 'setup.sh'
+  entrypoint: ['ruby', './action.rb']
