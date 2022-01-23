@@ -16,7 +16,7 @@ jobs:
   check-dependencies:
     runs-on: ubuntu-latest
     steps:
-      - uses: banesullivan/dependabot-bump-together-action@main
+      - uses: marcoroth/dependabot-bump-together-action@main
         with:
           dependencies: dependency_1, dependency_2
           package_managers: pip
