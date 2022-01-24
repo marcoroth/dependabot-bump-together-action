@@ -1,6 +1,6 @@
 # Dependabot Bump Together GitHub Action
 
-GitHub Action to bump multiple dependencies with [Dependabot](https://dependabot.com) in a single pull request.
+GitHub Action to bump multiple dependencies from either the same or mulitple package managers with [Dependabot](https://dependabot.com) in a single pull request.
 
 ## Example usage
 
