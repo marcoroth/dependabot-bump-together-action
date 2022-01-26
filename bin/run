@@ -1,0 +1,15 @@
+#!/bin/bash
+
+set -e
+
+docker run --rm -it \
+  --workdir /github/workspace \
+  -e "INPUT_TOKEN=$GITHUB_TOKEN" \
+  -e "INPUT_PACKAGE_MANAGERS=npm_and_yarn,bundler" \
+  -e "INPUT_USERNAME=x-access-token" \
+  -e "INPUT_DEPENDENCIES=rails,rubocop,standard" \
+  -e "INPUT_DIRECTORY=/" \
+  -e "INPUT_BRANCH=main" \
+  -e "GITHUB_REPOSITORY=marcoroth/project" \
+  -v "../project:/github/workspace" \
+  dependabot
