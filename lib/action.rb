@@ -79,7 +79,6 @@ package_managers.each do |package_manager|
 
   # Get all updates that match list of packages
   dependencies.each do |dep|
-    puts ""
     puts "INFO: processing dependency #{dep.name} #{dep.version}"
 
     checker = Dependabot::UpdateCheckers.for_package_manager(package_manager).new(
@@ -105,17 +104,16 @@ package_managers.each do |package_manager|
   end
 
   # Iteratively update files for each dependency
-  deps = []
-  updated_deps_for_package_manager.flatten.uniq.each do |dep|
-    updater = Dependabot::FileUpdaters.for_package_manager(package_manager).new(
-      dependencies: [dep,],
-      dependency_files: files,
-      credentials: credentials
-    )
-    # Overwrite files with changes for each update
-    files = updater.updated_dependency_files
-    deps << dep
-  end
+  deps = updated_deps_for_package_manager.flatten.uniq
+
+  updater = Dependabot::FileUpdaters.for_package_manager(package_manager).new(
+    dependencies: deps,
+    dependency_files: files,
+    credentials: credentials
+  )
+
+  # Overwrite files with changes for each update
+  files = updater.updated_dependency_files
 
   begin
     updated_files_global << files
@@ -165,9 +163,11 @@ if updated_deps_global.any? && updated_files_global.any?
 
   pr = pr_creator.create
 
-  if pr
-    puts "INFO: Created PR with title \"#{pr.dig(:title)}\" (ID: #{pr.dig(:number)}) in #{pr.dig(:repo, :full_name)}"
-    puts "INFO: #{pr.dig(:url)}"
+  puts ''
+
+  if pr.to_h[:created_at].present?
+    puts "INFO: Created PR with title '#{pr.to_h.dig(:title)}' (ID: ##{pr.to_h.dig(:number)}) in #{repo}"
+    puts "INFO: #{pr.to_h.dig(:url).to_s.gsub('api.github.com/repos', 'github.com')}"
   else
     puts 'ERROR: PR already exists or an error has occurred'
   end
