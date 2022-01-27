@@ -86,6 +86,11 @@ Default value: `x-access-token`
 **Required:** A GitHub [Access Token](https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line) with permission to create the pull request and access potential private repos Dependabot should bump.
 
 
+### `update_all`
+**Optional:** Whether the action should attempt to update all dependencies defined in your dependency file.
+
+Default value: `false`
+
 ## Ressources
 
 This GitHub Action depends on the [`dependabot/dependabot-core`](https://hub.docker.com/r/dependabot/dependabot-core) Docker Image and uses a modified version of the [dependabot/dependabot-script](https://github.com/dependabot/dependabot-script) `update-script.rb` to bump the dependencies.

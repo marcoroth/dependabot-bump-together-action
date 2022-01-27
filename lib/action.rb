@@ -14,6 +14,7 @@ branch = ENV['INPUT_BRANCH']
 dependencies = ENV['INPUT_DEPENDENCIES']
 package_managers_raw = ENV['INPUT_PACKAGE_MANAGERS']
 access_token = ENV['INPUT_TOKEN']
+update_all = ENV['INPUT_UPDATE_ALL'].present? && ENV['INPUT_UPDATE_ALL'].to_s == 'true'
 
 updated_files_global = []
 updated_deps_global = []
@@ -44,7 +45,7 @@ puts ""
 package_managers = package_managers_raw.to_s.split(',').map(&:strip)
 puts "INFO: using package managers: #{package_managers.join(', ')}"
 
-packages = dependencies.to_s.split(',').map(&:strip)
+packages = update_all ? [] : dependencies.to_s.split(',').map(&:strip)
 puts "INFO: processing packages: #{packages.join(', ')}"
 puts ""
 

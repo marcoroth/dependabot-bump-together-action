@@ -24,6 +24,10 @@ inputs:
   token:
     description: 'Access token with permission to create the pull request'
     required: true
+  update_all:
+    description: 'Whether the action should attempt to update all dependencies defined in your dependency file'
+    required: true
+    default: false
 branding:
   icon: 'arrow-up-circle'
   color: 'blue'
