@@ -79,7 +79,7 @@ package_managers.each do |package_manager|
 
   # Get all updates that match list of packages
   dependencies.each do |dep|
-    puts "INFO: processing dependency #{dep.name} #{dep.version}"
+    puts "INFO: processing #{package_manager} dependency #{dep.name} #{dep.version}"
 
     checker = Dependabot::UpdateCheckers.for_package_manager(package_manager).new(
       dependency: dep,
@@ -89,18 +89,18 @@ package_managers.each do |package_manager|
 
     if checker.up_to_date?
       puts "INFO: #{dep.name} #{dep.version} is up to date! Skipping..."
+      puts ""
 
       next
     else
       puts "INFO: #{dep.name} is outdated and will be updated..."
+      puts ""
     end
 
     checker.can_update?(requirements_to_unlock: :own)
     updated_deps = checker.updated_dependencies(requirements_to_unlock: :own)
 
     updated_deps_for_package_manager << updated_deps if updated_deps.any?
-
-    puts ""
   end
 
   # Iteratively update files for each dependency
