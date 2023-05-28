@@ -152,7 +152,16 @@ puts ""
 
 updated_files_global.each do |updated_file|
   puts "INFO: going to commit changes in #{updated_file.name}"
+  `git diff #{updated_file.name}`
 end
+
+puts "updated_deps_global"
+puts updated_deps_global.inspect
+
+puts ""
+
+puts "updated_files_global"
+puts updated_files_global.inspect
 
 if updated_deps_global.any? && updated_files_global.any?
   pr_creator = Dependabot::PullRequestCreator.new(
