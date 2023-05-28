@@ -45,7 +45,7 @@ package_managers = package_managers_raw.to_s.split(',').map(&:strip)
 puts "INFO: using package managers: #{package_managers.join(', ')}"
 
 packages = dependencies.to_s.split(',').map(&:strip)
-puts "INFO: processing packages: #{packages.join(', ')}"
+puts "INFO: processing packages: #{packages.inspect}"
 puts ""
 
 puts "INFO: no package manager provided. The provided input is \"#{package_managers_raw}\"" if package_managers.empty?
@@ -148,21 +148,16 @@ updated_deps_global.each do |updated_dep|
   puts "INFO: updated #{updated_dep.package_manager} dependency #{updated_dep.name} from #{prev_ref ? "#{prev_ref} ": ""}(#{updated_dep.previous_version}) to #{new_ref ? "#{new_ref} ": ""}(#{updated_dep.version}) in #{file}"
 end
 
+puts "INFO: no updated dependencies found" if updated_deps_global.empty?
 puts ""
 
 updated_files_global.each do |updated_file|
   puts "INFO: going to commit changes in #{updated_file.name}"
 end
-
-puts "updated_deps_global"
-puts updated_deps_global.inspect
-
+puts "INFO: no changed files found to commit" if updated_files_global.empty?
 puts ""
 
-puts "updated_files_global"
-puts updated_files_global.inspect
-
-if updated_deps_global.any? || updated_files_global.any?
+if updated_deps_global.any? && updated_files_global.any?
   pr_creator = Dependabot::PullRequestCreator.new(
     source: source,
     base_commit: commit,
