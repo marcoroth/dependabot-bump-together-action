@@ -163,7 +163,7 @@ puts ""
 puts "updated_files_global"
 puts updated_files_global.inspect
 
-if updated_deps_global.any? && updated_files_global.any?
+if updated_deps_global.any? || updated_files_global.any?
   pr_creator = Dependabot::PullRequestCreator.new(
     source: source,
     base_commit: commit,
