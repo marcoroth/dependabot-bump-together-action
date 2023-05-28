@@ -125,13 +125,13 @@ package_managers.each do |package_manager|
 
     next
   rescue Dependabot::SharedHelpers::HelperSubprocessFailed, StandardError => e
-    puts "ERROR: Error while trying to retrieve updated files for package manager '#{package_manager}'. Reason: #{e}. Skipping..."
+    puts "ERROR: Error while trying to retrieve updated files for package manager '#{package_manager}'. Reason: #{e.full_message}. Skipping..."
     puts e.backtrace
 
     next
   end
 rescue => e
-  puts "ERROR: while proccessing package manager '#{package_manager}'. Reason: #{e}"
+  puts "ERROR: while proccessing package manager '#{package_manager}'. Reason: #{e.full_message}"
   puts e.backtrace
 
   next

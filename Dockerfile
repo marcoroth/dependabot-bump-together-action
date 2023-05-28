@@ -9,6 +9,8 @@ RUN echo 'gem: --no-document' >> ~/.gemrc
 RUN gem install bundler
 RUN gem install dependabot-omnibus
 
+ENV DEBUG_HELPERS=true
+
 WORKDIR /action
 COPY lib /action/lib
 
