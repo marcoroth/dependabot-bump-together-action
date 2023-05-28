@@ -152,7 +152,6 @@ puts ""
 
 updated_files_global.each do |updated_file|
   puts "INFO: going to commit changes in #{updated_file.name}"
-  `git diff #{updated_file.name}`
 end
 
 puts "updated_deps_global"
