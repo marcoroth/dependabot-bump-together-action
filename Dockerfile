@@ -1,4 +1,4 @@
-FROM dependabot/dependabot-core
+FROM ghcr.io/dependabot/dependabot-core:latest
 USER root
 
 LABEL "repository"="https://github.com/marcoroth/dependabot-bump-together-action"
