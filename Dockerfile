@@ -2,7 +2,7 @@ FROM ghcr.io/dependabot/dependabot-core:latest
 USER root
 
 LABEL "repository"="https://github.com/marcoroth/dependabot-bump-together-action"
-LABEL "version"="0.3.0"
+LABEL "version"="0.3.2"
 
 RUN echo 'gem: --no-document' >> ~/.gemrc
 

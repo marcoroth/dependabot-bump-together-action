@@ -16,7 +16,7 @@ jobs:
   check-dependencies:
     runs-on: ubuntu-latest
     steps:
-      - uses: marcoroth/dependabot-bump-together-action@v0.3.1
+      - uses: marcoroth/dependabot-bump-together-action@v0.3.2
         with:
           dependencies: dependency_1, dependency_2
           package_managers: bundler, npm_and_yarn, pip
