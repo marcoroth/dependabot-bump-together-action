@@ -1,3 +1,10 @@
+> [!NOTE]  
+> **Update 2023-08-24**
+> 
+> Looks like Dependabot introduced grouped Dependabot updates which makes this GitHub Action redundant. Check out their announcement here:
+> 
+> https://github.blog/2023-08-24-a-faster-way-to-manage-version-updates-with-dependabot/
+
 # Dependabot Bump Together GitHub Action
 
 GitHub Action to bump multiple dependencies from either the same or mulitple package managers with [Dependabot](https://dependabot.com) in a single pull request.
